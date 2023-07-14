@@ -22,6 +22,7 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('/dashboard', 'AdminController@dashboard');
         Route::match(['get', 'post'], '/change-password', 'AdminController@changePassword');
         Route::post('check-password', 'AdminController@checkPassword');
+        Route::match(['get', 'post'], 'update-detail', 'AdminController@updateDetail');
         Route::get('/logout', 'AdminController@logout');
 
         Route::get('tasks', 'TaskController@index');
