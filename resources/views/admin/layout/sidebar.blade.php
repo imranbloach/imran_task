@@ -121,6 +121,21 @@
                 @php
                 $active = "";
                 @endphp
+                @if(Session::get('page') == 'subadmins')
+                @php
+                $active = 'active';
+                @endphp
+                @endif
+              <li class="nav-item">
+                <a href="{{ url('admin/sub-admins') }}" class="nav-link {{ $active }}">
+                  <i class="fa fa-users nav-icon"></i>
+                  <p>Sub Admins</p>
+                </a>
+              </li>
+
+                @php
+                $active = "";
+                @endphp
                 @if(Session::get('page') == 'tasks')
                 @php
                 $active = 'active';
@@ -135,7 +150,15 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            @php
+               $active = "";
+               @endphp
+               @if(Session::get('page') == 'pages')
+               @php
+               $active = 'active';
+               @endphp
+               @endif
+            <a href="#" class="nav-link {{ $active }}">
               <i class="nav-icon fas fa-tree"></i>
               <p>
                 CMS Pages
@@ -143,10 +166,18 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+                @php
+               $active = "";
+               @endphp
+               @if(Session::get('page') == 'pages')
+               @php
+               $active = 'active';
+               @endphp
+               @endif
               <li class="nav-item">
-                <a href="pages/forms/general.html" class="nav-link">
+                <a href="{{ url('admin/cms-pages') }}" class="nav-link {{ $active }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>About Us</p>
+                  <p>Pages</p>
                 </a>
               </li>
               <li class="nav-item">

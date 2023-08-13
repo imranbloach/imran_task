@@ -31,6 +31,13 @@ class AdminController extends Controller
             ];
             $this->validate($request, $rules, $customMessages);
             if(Auth::guard('admin')->attempt(['email'=>$request->email, 'password'=>$request->password])){
+                if(!empty($request->remember_me)){
+                    setcookie('email', $request->email, time()+4500);
+                    setcookie('password', $request->password, time()+4500);
+                }else {
+                    setcookie('email', "");
+                    setcookie('password', "");
+                }
                 return redirect('admin/dashboard');
             }else {
                 return redirect()->back()->with("error_message", "Invalid email or Password");
@@ -104,5 +111,62 @@ class AdminController extends Controller
     public function logout(){
         Auth::guard('admin')->logout();
         return redirect('/admin/login');
+    }
+
+    public function subAdmins(){
+        Session::put('page', 'subadmins');
+        $subAdmins = Admin::where('type', 'subadmin')->get();
+
+        return view('admin.subadmins.index')->with(compact('subAdmins'));
+    }
+
+    public function addEditSubAdmin(Request $request, $id = null){
+        if($id == ''){
+            $title = "Add Sub Admin";
+            $subAdmin = new Admin;
+            $message = "Sub Admin addedd successfully";
+        }else {
+            $title = "Edit Sub Admin";
+            $subAdmin = Admin::find($id);
+            $message = "Sub Admin updated successfully";
+        }
+        if($request->isMethod('post')){
+            $rules = [
+                'name'=>'required',
+                'mobile'=>'required',
+                'email'=>'required|email'
+            ];
+            $customMessages = [
+                'name.required'=>'Sub Admin name is required.',
+                'mobile.required'=>'Mobile number is required.',
+                'email.required'=>'Email is required.',
+                'email.email'=>'Valid email is required.',
+            ];
+
+            $this->validate($request, $rules, $customMessages);
+
+            $subAdmin->name = $request->name;
+            $subAdmin->mobile = $request->mobile;
+            $subAdmin->email = $request->email;
+            $subAdmin->type = $request->meta_title;
+            $subAdmin->meta_description = $request->meta_description;
+            $subAdmin->meta_keywords = $request->meta_keywords;
+            $subAdmin->status = 1;
+            $subAdmin->save();
+        }
+    }
+
+    public function updateSubAdminStatus(Request $request, Admin $subAdmin){
+        if($request->ajax()){
+            $status = ($request->status == 'active')? 0:1;
+            Admin::where('id', $request->sub_admin_id)->update(['status'=>$status]);
+
+            return response()->json(
+                [
+                    'status'=>$status,
+                    'sub_admin_id'=>$request->sub_admin_id
+                ]
+            );
+        }
     }
 }

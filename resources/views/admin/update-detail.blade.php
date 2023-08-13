@@ -78,6 +78,7 @@
                             @if (!empty(Auth::guard('admin')->user()->image))
                                 <a target="_blank" href="{{ url('admin/img/photos/'.Auth::guard('admin')->user()->image) }}">View Image</a>
                             @endif
+                            <input type="hidden" name="current_img"  value="{{ Auth::guard()->user()->image }}">
                         </div>
                         </div>
                         <!-- /.card-body -->
