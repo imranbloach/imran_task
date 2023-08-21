@@ -148,12 +148,15 @@ class AdminController extends Controller
             $subAdmin->name = $request->name;
             $subAdmin->mobile = $request->mobile;
             $subAdmin->email = $request->email;
-            $subAdmin->type = $request->meta_title;
-            $subAdmin->meta_description = $request->meta_description;
-            $subAdmin->meta_keywords = $request->meta_keywords;
+            if($id == ''){
+                $subAdmin->password = $request->password;
+            }
+            $subAdmin->type = $request->role;
             $subAdmin->status = 1;
             $subAdmin->save();
+            return redirect('admin/sub-admins')->with('success_message', $message);
         }
+        return view("admin.subadmins.add_edit_subadmin_page")->with(compact("title", "subAdmin"));
     }
 
     public function updateSubAdminStatus(Request $request, Admin $subAdmin){
@@ -168,5 +171,11 @@ class AdminController extends Controller
                 ]
             );
         }
+    }
+
+    public function destroy($id)
+    {
+        Admin::where('id', $id)->delete();
+        return redirect()->back()->with('success_message', 'Subadmin has been deleted successfully.');
     }
 }

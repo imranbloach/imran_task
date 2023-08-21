@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Admin extends Authenticatable
 {
@@ -16,4 +17,11 @@ class Admin extends Authenticatable
         'password'
     ];
     protected $hidden = ['password'];
+
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => bcrypt($value)
+        );
+    }
 }

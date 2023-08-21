@@ -45,7 +45,7 @@
                 <div class="card-header">
                   <h3 class="card-title">CMS Pages</h3>
                   <div class="card-tools">
-                    <a class="btn btn-success btn-sm" href="{{ url('admin/add-edit-cms-page') }}">
+                    <a class="btn btn-success btn-sm" href="{{ url('admin/add-edit-sub-admin') }}">
                         <i class="fas fa-plus">
                         </i>
                         Add
